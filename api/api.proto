@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+message NetAddr {
+    string netAddr = 1;
+}
+
+service Antibruteforce {
+    rpc AddBlackNet (NetAddr) returns (google.protobuf.Empty);
+    rpc RemoveBlackNet (NetAddr) returns (google.protobuf.Empty);
+    rpc AddWhiteNet (NetAddr) returns (google.protobuf.Empty);
+    rpc RemoveWhiteNet (NetAddr) returns (google.protobuf.Empty);
+}
