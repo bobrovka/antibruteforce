@@ -9,8 +9,10 @@ import (
 	"syscall"
 
 	"github.com/bobrovka/antibruteforce/internal"
+	blackwhitestorage "github.com/bobrovka/antibruteforce/internal/redisbwstorage"
 	"github.com/bobrovka/antibruteforce/internal/service"
 	"github.com/bobrovka/antibruteforce/pkg/antibruteforce/api"
+	"github.com/go-redis/redis"
 	"github.com/heetch/confita"
 	"github.com/heetch/confita/backend/file"
 	flag "github.com/spf13/pflag"
@@ -29,7 +31,11 @@ func main() {
 
 	cfg := getConfig()
 
-	antibruteforceService := service.NewService()
+	redisClient := getRedisClient(cfg.Redis)
+
+	bws := blackwhitestorage.NewBlackwhitestorage(redisClient)
+
+	antibruteforceService := service.NewService(bws)
 
 	// Create grpc server
 	grpcServer := grpc.NewServer()
@@ -81,4 +87,19 @@ func getConfig() *internal.Config {
 	}
 
 	return cfg
+}
+
+func getRedisClient(addr string) *redis.Client {
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: "",
+		DB:       0,
+	})
+
+	_, err := rdb.Ping().Result()
+	if err != nil {
+		log.Fatal("cannot connect to redis, ", err)
+	}
+
+	return rdb
 }

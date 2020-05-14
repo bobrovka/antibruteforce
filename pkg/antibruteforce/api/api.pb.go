@@ -64,8 +64,104 @@ func (m *NetAddr) GetNetAddr() string {
 	return ""
 }
 
+type CheckRequest struct {
+	Login                string   `protobuf:"bytes,1,opt,name=login,proto3" json:"login,omitempty"`
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Ip                   string   `protobuf:"bytes,3,opt,name=ip,proto3" json:"ip,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CheckRequest) Reset()         { *m = CheckRequest{} }
+func (m *CheckRequest) String() string { return proto.CompactTextString(m) }
+func (*CheckRequest) ProtoMessage()    {}
+func (*CheckRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1b40cafcd4234784, []int{1}
+}
+
+func (m *CheckRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CheckRequest.Unmarshal(m, b)
+}
+func (m *CheckRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CheckRequest.Marshal(b, m, deterministic)
+}
+func (m *CheckRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckRequest.Merge(m, src)
+}
+func (m *CheckRequest) XXX_Size() int {
+	return xxx_messageInfo_CheckRequest.Size(m)
+}
+func (m *CheckRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckRequest proto.InternalMessageInfo
+
+func (m *CheckRequest) GetLogin() string {
+	if m != nil {
+		return m.Login
+	}
+	return ""
+}
+
+func (m *CheckRequest) GetPassword() string {
+	if m != nil {
+		return m.Password
+	}
+	return ""
+}
+
+func (m *CheckRequest) GetIp() string {
+	if m != nil {
+		return m.Ip
+	}
+	return ""
+}
+
+type Status struct {
+	Permitted            bool     `protobuf:"varint,1,opt,name=permitted,proto3" json:"permitted,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Status) Reset()         { *m = Status{} }
+func (m *Status) String() string { return proto.CompactTextString(m) }
+func (*Status) ProtoMessage()    {}
+func (*Status) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1b40cafcd4234784, []int{2}
+}
+
+func (m *Status) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Status.Unmarshal(m, b)
+}
+func (m *Status) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Status.Marshal(b, m, deterministic)
+}
+func (m *Status) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Status.Merge(m, src)
+}
+func (m *Status) XXX_Size() int {
+	return xxx_messageInfo_Status.Size(m)
+}
+func (m *Status) XXX_DiscardUnknown() {
+	xxx_messageInfo_Status.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Status proto.InternalMessageInfo
+
+func (m *Status) GetPermitted() bool {
+	if m != nil {
+		return m.Permitted
+	}
+	return false
+}
+
 func init() {
 	proto.RegisterType((*NetAddr)(nil), "NetAddr")
+	proto.RegisterType((*CheckRequest)(nil), "CheckRequest")
+	proto.RegisterType((*Status)(nil), "Status")
 }
 
 func init() {
@@ -73,18 +169,24 @@ func init() {
 }
 
 var fileDescriptor_1b40cafcd4234784 = []byte{
-	// 168 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4d, 0x2c, 0xc8, 0xd4,
-	0x4f, 0x2c, 0xc8, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x97, 0x92, 0x4e, 0xcf, 0xcf, 0x4f, 0xcf,
-	0x49, 0xd5, 0x07, 0xf3, 0x92, 0x4a, 0xd3, 0xf4, 0x53, 0x73, 0x0b, 0x4a, 0x2a, 0x21, 0x92, 0x4a,
-	0xca, 0x5c, 0xec, 0x7e, 0xa9, 0x25, 0x8e, 0x29, 0x29, 0x45, 0x42, 0x12, 0x5c, 0xec, 0x79, 0x10,
-	0xa6, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x67, 0x10, 0x8c, 0x6b, 0x74, 0x8b, 0x91, 0x8b, 0xcf, 0x31,
-	0xaf, 0x24, 0x33, 0xa9, 0xa8, 0xb4, 0x24, 0x35, 0x2d, 0xbf, 0x28, 0x39, 0x55, 0x48, 0x9f, 0x8b,
-	0xdb, 0x31, 0x25, 0xc5, 0x29, 0x27, 0x31, 0x39, 0xdb, 0x2f, 0xb5, 0x44, 0x88, 0x43, 0x0f, 0x6a,
-	0x8a, 0x94, 0x98, 0x1e, 0xc4, 0x3a, 0x3d, 0x98, 0x75, 0x7a, 0xae, 0x20, 0xeb, 0x84, 0x8c, 0xb8,
-	0xf8, 0x82, 0x52, 0x73, 0xf3, 0xcb, 0x52, 0x49, 0xd0, 0x03, 0xb1, 0x24, 0x3c, 0x23, 0xb3, 0x24,
-	0x95, 0x44, 0x4b, 0x88, 0xd7, 0x93, 0xc4, 0x06, 0xe6, 0x1b, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff,
-	0x55, 0xf5, 0xf0, 0x30, 0x36, 0x01, 0x00, 0x00,
+	// 262 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x90, 0xc1, 0x4f, 0x83, 0x30,
+	0x14, 0xc6, 0x03, 0x66, 0x83, 0x3d, 0x1d, 0x87, 0xc6, 0x18, 0x82, 0x26, 0x1a, 0x4c, 0x8c, 0xa7,
+	0x92, 0xcc, 0xbf, 0x00, 0x8d, 0xd7, 0xc5, 0xe0, 0xc1, 0x33, 0xd0, 0x37, 0xd6, 0x0c, 0x68, 0x2d,
+	0x0f, 0x8d, 0x7f, 0xbb, 0x17, 0x63, 0xbb, 0xe9, 0xae, 0xdc, 0xfa, 0x7b, 0xaf, 0x5f, 0xbf, 0x7e,
+	0x1f, 0x2c, 0x4b, 0x2d, 0xb3, 0x52, 0x4b, 0xae, 0x8d, 0x22, 0x95, 0x5c, 0x36, 0x4a, 0x35, 0x2d,
+	0x66, 0x96, 0xaa, 0x71, 0x93, 0x61, 0xa7, 0xe9, 0xcb, 0x2d, 0xd3, 0x5b, 0x08, 0xd6, 0x48, 0xb9,
+	0x10, 0x86, 0xc5, 0x10, 0xf4, 0xee, 0x18, 0x7b, 0x37, 0xde, 0xfd, 0xa2, 0x38, 0x60, 0xfa, 0x02,
+	0x67, 0x4f, 0x5b, 0xac, 0x77, 0x05, 0xbe, 0x8f, 0x38, 0x10, 0x3b, 0x87, 0x59, 0xab, 0x1a, 0xd9,
+	0xef, 0xef, 0x39, 0x60, 0x09, 0x84, 0xba, 0x1c, 0x86, 0x4f, 0x65, 0x44, 0xec, 0xdb, 0xc5, 0x1f,
+	0xb3, 0x08, 0x7c, 0xa9, 0xe3, 0x13, 0x3b, 0xf5, 0xa5, 0x4e, 0xef, 0x60, 0xfe, 0x4a, 0x25, 0x8d,
+	0x03, 0xbb, 0x82, 0x85, 0x46, 0xd3, 0x49, 0x22, 0x14, 0xf6, 0xbd, 0xb0, 0xf8, 0x1f, 0xac, 0xbe,
+	0x3d, 0x88, 0xf2, 0x9e, 0x64, 0x65, 0x46, 0xc2, 0x8d, 0x32, 0x35, 0xb2, 0x0c, 0x4e, 0x73, 0x21,
+	0x1e, 0xdb, 0xb2, 0xde, 0xad, 0x91, 0x58, 0xc8, 0xf7, 0xff, 0x4f, 0x2e, 0xb8, 0x0b, 0xca, 0x0f,
+	0x41, 0xf9, 0xf3, 0x6f, 0x50, 0xb6, 0x82, 0xa8, 0xc0, 0x4e, 0x7d, 0xe0, 0x04, 0x8d, 0x33, 0x79,
+	0xdb, 0x4a, 0xc2, 0x89, 0x26, 0x13, 0x34, 0xd7, 0x30, 0xb3, 0xb5, 0xb2, 0x25, 0x3f, 0xae, 0x37,
+	0x09, 0xb8, 0xeb, 0xa6, 0x9a, 0x5b, 0xc1, 0xc3, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa6, 0xd7,
+	0x1b, 0x2e, 0xd1, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -103,6 +205,7 @@ type AntibruteforceClient interface {
 	RemoveBlackNet(ctx context.Context, in *NetAddr, opts ...grpc.CallOption) (*empty.Empty, error)
 	AddWhiteNet(ctx context.Context, in *NetAddr, opts ...grpc.CallOption) (*empty.Empty, error)
 	RemoveWhiteNet(ctx context.Context, in *NetAddr, opts ...grpc.CallOption) (*empty.Empty, error)
+	Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*Status, error)
 }
 
 type antibruteforceClient struct {
@@ -149,12 +252,22 @@ func (c *antibruteforceClient) RemoveWhiteNet(ctx context.Context, in *NetAddr, 
 	return out, nil
 }
 
+func (c *antibruteforceClient) Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/Antibruteforce/Check", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AntibruteforceServer is the server API for Antibruteforce service.
 type AntibruteforceServer interface {
 	AddBlackNet(context.Context, *NetAddr) (*empty.Empty, error)
 	RemoveBlackNet(context.Context, *NetAddr) (*empty.Empty, error)
 	AddWhiteNet(context.Context, *NetAddr) (*empty.Empty, error)
 	RemoveWhiteNet(context.Context, *NetAddr) (*empty.Empty, error)
+	Check(context.Context, *CheckRequest) (*Status, error)
 }
 
 // UnimplementedAntibruteforceServer can be embedded to have forward compatible implementations.
@@ -172,6 +285,9 @@ func (*UnimplementedAntibruteforceServer) AddWhiteNet(ctx context.Context, req *
 }
 func (*UnimplementedAntibruteforceServer) RemoveWhiteNet(ctx context.Context, req *NetAddr) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveWhiteNet not implemented")
+}
+func (*UnimplementedAntibruteforceServer) Check(ctx context.Context, req *CheckRequest) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 
 func RegisterAntibruteforceServer(s *grpc.Server, srv AntibruteforceServer) {
@@ -250,6 +366,24 @@ func _Antibruteforce_RemoveWhiteNet_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Antibruteforce_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AntibruteforceServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Antibruteforce/Check",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AntibruteforceServer).Check(ctx, req.(*CheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Antibruteforce_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Antibruteforce",
 	HandlerType: (*AntibruteforceServer)(nil),
@@ -269,6 +403,10 @@ var _Antibruteforce_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveWhiteNet",
 			Handler:    _Antibruteforce_RemoveWhiteNet_Handler,
+		},
+		{
+			MethodName: "Check",
+			Handler:    _Antibruteforce_Check_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
