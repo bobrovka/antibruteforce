@@ -13,11 +13,13 @@ import (
 
 type Service struct {
 	bws BlackWhiteStorage
+	lb  LeakyBucket
 }
 
-func NewService(bws BlackWhiteStorage) *Service {
+func NewService(bws BlackWhiteStorage, lb LeakyBucket) *Service {
 	return &Service{
 		bws: bws,
+		lb:  lb,
 	}
 }
 
@@ -77,6 +79,15 @@ func (s *Service) RemoveWhiteNet(_ context.Context, request *api.NetAddr) (*empt
 	return &emptypb.Empty{}, nil
 }
 
+func (s *Service) ResetBlackWhiteLists(_ context.Context, _ *empty.Empty) (*empty.Empty, error) {
+	err := s.bws.Clear()
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
 func (s *Service) Check(_ context.Context, request *api.CheckRequest) (*api.Status, error) {
 	ip := net.ParseIP(request.GetIp())
 	if len(ip) == 0 {
@@ -91,19 +102,24 @@ func (s *Service) Check(_ context.Context, request *api.CheckRequest) (*api.Stat
 	switch statusIp {
 	case Rejected:
 		return &api.Status{
-			Permitted: false,
+			Ok: false,
 		}, nil
 	case Permitted:
 		return &api.Status{
-			Permitted: true,
-		}, nil
-	case Undefined:
-		return &api.Status{
-			Permitted: true,
+			Ok: true,
 		}, nil
 	}
 
+	err = s.lb.Try(request.GetLogin(), request.GetPassword(), request.GetIp())
+	if err == errRejected {
+		return &api.Status{
+			Ok: false,
+		}, nil
+	} else if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	return &api.Status{
-		Permitted: true,
+		Ok: true,
 	}, nil
 }

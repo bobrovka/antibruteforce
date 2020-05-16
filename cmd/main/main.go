@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/bobrovka/antibruteforce/internal"
+	"github.com/bobrovka/antibruteforce/internal/leakybucket"
 	blackwhitestorage "github.com/bobrovka/antibruteforce/internal/redisbwstorage"
 	"github.com/bobrovka/antibruteforce/internal/service"
 	"github.com/bobrovka/antibruteforce/pkg/antibruteforce/api"
@@ -34,8 +35,9 @@ func main() {
 	redisClient := getRedisClient(cfg.Redis)
 
 	bws := blackwhitestorage.NewBlackwhitestorage(redisClient)
+	lb := leakybucket.NewLeakyBucket()
 
-	antibruteforceService := service.NewService(bws)
+	antibruteforceService := service.NewService(bws, lb)
 
 	// Create grpc server
 	grpcServer := grpc.NewServer()

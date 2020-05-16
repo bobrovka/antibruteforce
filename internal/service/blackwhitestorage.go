@@ -16,4 +16,5 @@ type BlackWhiteStorage interface {
 	AddWhiteNet(netAddr string) error
 	RemoveWhiteNet(netAddr string) error
 	Check(ip net.IP) (IpStatus, error)
+	Clear() error
 }

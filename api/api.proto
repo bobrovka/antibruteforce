@@ -13,7 +13,7 @@ message CheckRequest {
 }
 
 message Status {
-    bool permitted = 1;
+    bool ok = 1;
 }
 
 service Antibruteforce {
@@ -21,6 +21,7 @@ service Antibruteforce {
     rpc RemoveBlackNet (NetAddr) returns (google.protobuf.Empty);
     rpc AddWhiteNet (NetAddr) returns (google.protobuf.Empty);
     rpc RemoveWhiteNet (NetAddr) returns (google.protobuf.Empty);
+    rpc ResetBlackWhiteLists (google.protobuf.Empty) returns (google.protobuf.Empty);
 
     rpc Check(CheckRequest) returns (Status);
 }

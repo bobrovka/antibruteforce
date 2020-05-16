@@ -53,6 +53,11 @@ func (s *Blackwhitestorage) RemoveWhiteNet(netAddr string) error {
 	return nil
 }
 
+func (s *Blackwhitestorage) Clear() error {
+	err := s.redisCli.FlushAll().Err()
+	return err
+}
+
 func (s *Blackwhitestorage) Check(ip net.IP) (service.IpStatus, error) {
 	blackList, err := s.redisCli.SMembers("black").Result()
 	if err != nil {
