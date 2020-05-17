@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+    abf:
+        container_name: abf
+        build:
+            context: ..
+        ports:
+            - 50051:50051
+        volumes:
+            - ../config/docker-config.json:/config/config.json
+        environment:
+            - CONFIG_PATH=/config/config.json
+        command: "./abf"
+        depends_on: 
+            - redis
+        # command: ["ping", "127.0.0.1"]
+        command: ["/scripts/wait-for-it.sh", "redis:6379", "-t", "0", "--", "/app/abf"]
+    
+    redis:
+        image: redis:6

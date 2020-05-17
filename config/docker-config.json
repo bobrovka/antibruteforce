@@ -1,0 +1,7 @@
+{
+    "HTTPListen": "0.0.0.0:50051",
+    "Redis": "redis:6379",
+    "RPMLogin": 10,
+    "RPMPassword": 100,
+    "RPMIP": 1000
+}
