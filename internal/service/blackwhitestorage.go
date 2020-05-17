@@ -2,10 +2,10 @@ package service
 
 import "net"
 
-type IpStatus int8
+type IPStatus int8
 
 const (
-	Undefined IpStatus = iota
+	Undefined IPStatus = iota
 	Permitted
 	Rejected
 )
@@ -15,6 +15,6 @@ type BlackWhiteStorage interface {
 	RemoveBlackNet(netAddr string) error
 	AddWhiteNet(netAddr string) error
 	RemoveWhiteNet(netAddr string) error
-	Check(ip net.IP) (IpStatus, error)
+	Check(ip net.IP) (IPStatus, error)
 	Clear() error
 }

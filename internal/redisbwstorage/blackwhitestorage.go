@@ -58,7 +58,7 @@ func (s *Blackwhitestorage) Clear() error {
 	return err
 }
 
-func (s *Blackwhitestorage) Check(ip net.IP) (service.IpStatus, error) {
+func (s *Blackwhitestorage) Check(ip net.IP) (service.IPStatus, error) {
 	blackList, err := s.redisCli.SMembers("black").Result()
 	if err != nil {
 		return service.Undefined, err

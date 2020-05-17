@@ -94,12 +94,12 @@ func (s *Service) Check(_ context.Context, request *api.CheckRequest) (*api.Stat
 		return nil, status.Error(codes.InvalidArgument, "field ip is required and should be appropriate format")
 	}
 
-	statusIp, err := s.bws.Check(ip)
+	statusIP, err := s.bws.Check(ip)
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	switch statusIp {
+	switch statusIP {
 	case Rejected:
 		return &api.Status{
 			Ok: false,

@@ -33,7 +33,7 @@ func GetConfig(configPath string) *Config {
 
 	err := loader.Load(context.Background(), cfg)
 	if err != nil {
-		log.Fatal("cannot read config", err)
+		log.Fatal("cannot read config. ", err)
 	}
 
 	return cfg
