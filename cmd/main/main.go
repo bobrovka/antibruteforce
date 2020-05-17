@@ -1,36 +1,24 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/bobrovka/antibruteforce/internal"
+	"github.com/bobrovka/antibruteforce/internal/config"
 	"github.com/bobrovka/antibruteforce/internal/leakybucket"
 	blackwhitestorage "github.com/bobrovka/antibruteforce/internal/redisbwstorage"
 	"github.com/bobrovka/antibruteforce/internal/service"
 	"github.com/bobrovka/antibruteforce/pkg/antibruteforce/api"
 	"github.com/go-redis/redis"
-	"github.com/heetch/confita"
-	"github.com/heetch/confita/backend/file"
-	flag "github.com/spf13/pflag"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-var configPath string
-
-func init() {
-	flag.StringVarP(&configPath, "config", "c", "", "path to config file")
-}
-
 func main() {
-	flag.Parse()
-
-	cfg := getConfig()
+	cfg := config.GetConfig(os.Getenv("CONFIG_PATH"))
 
 	redisClient := getRedisClient(cfg.Redis)
 
@@ -68,27 +56,6 @@ func main() {
 	}
 
 	grpcServer.GracefulStop()
-}
-
-func getConfig() *internal.Config {
-	if configPath == "" {
-		log.Fatal("no config file")
-	}
-
-	cfg := &internal.Config{
-		HTTPListen: "127.0.0.1:50051",
-	}
-
-	loader := confita.NewLoader(
-		file.NewBackend(configPath),
-	)
-
-	err := loader.Load(context.Background(), cfg)
-	if err != nil {
-		log.Fatal("cannot read config", err)
-	}
-
-	return cfg
 }
 
 func getRedisClient(addr string) *redis.Client {
