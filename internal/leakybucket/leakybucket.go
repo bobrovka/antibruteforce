@@ -7,15 +7,13 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-const (
-	maxLoadLogin    = 10
-	maxLoadPassword = 100
-	maxLoadIP       = 1000
-)
-
 var ErrBlocked = errors.New("blocked")
 
 type LeakyBucket struct {
+	maxLoadLogin    int64
+	maxLoadPassword int64
+	maxLoadIP       int64
+
 	lgmu      sync.Mutex
 	lgbuckets map[string]*bucket
 	lgdelCh   chan string
@@ -29,8 +27,12 @@ type LeakyBucket struct {
 	ipdelCh   chan string
 }
 
-func NewLeakyBucket() *LeakyBucket {
+func NewLeakyBucket(maxLogin, maxPassword, maxIP int64) *LeakyBucket {
 	lb := &LeakyBucket{
+		maxLoadLogin:    maxLogin,
+		maxLoadPassword: maxPassword,
+		maxLoadIP:       maxIP,
+
 		lgbuckets: map[string]*bucket{},
 		lgdelCh:   make(chan string),
 
@@ -70,21 +72,21 @@ func (s *LeakyBucket) Try(login string, password string, ip string) error {
 		s.lgmu.Lock()
 		defer s.lgmu.Unlock()
 
-		return checkBucket(s.lgbuckets, login, maxLoadLogin, s.lgdelCh)
+		return checkBucket(s.lgbuckets, login, s.maxLoadLogin, s.lgdelCh)
 	})
 
 	eg.Go(func() error {
 		s.pwmu.Lock()
 		defer s.pwmu.Unlock()
 
-		return checkBucket(s.pwbuckets, password, maxLoadPassword, s.pwdelCh)
+		return checkBucket(s.pwbuckets, password, s.maxLoadPassword, s.pwdelCh)
 	})
 
 	eg.Go(func() error {
 		s.ipmu.Lock()
 		defer s.ipmu.Unlock()
 
-		return checkBucket(s.ipbuckets, ip, maxLoadIP, s.ipdelCh)
+		return checkBucket(s.ipbuckets, ip, s.maxLoadIP, s.ipdelCh)
 	})
 
 	if err := eg.Wait(); err != nil {
@@ -101,10 +103,5 @@ func checkBucket(buckets map[string]*bucket, bucketKey string, maxload int64, de
 		buckets[bucketKey] = b
 	}
 
-	if b.load < b.maxload {
-		b.load++
-		return nil
-	}
-
-	return ErrBlocked
+	return b.try()
 }

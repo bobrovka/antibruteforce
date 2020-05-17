@@ -35,7 +35,7 @@ func main() {
 	redisClient := getRedisClient(cfg.Redis)
 
 	bws := blackwhitestorage.NewBlackwhitestorage(redisClient)
-	lb := leakybucket.NewLeakyBucket()
+	lb := leakybucket.NewLeakyBucket(cfg.RPMLogin, cfg.RPMPassword, cfg.RPMIP)
 
 	antibruteforceService := service.NewService(bws, lb)
 

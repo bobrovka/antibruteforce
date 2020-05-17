@@ -1,8 +1,11 @@
 package leakybucket
 
-import "time"
+import (
+	"sync/atomic"
+	"time"
+)
 
-const ttlUnused = 5 * time.Second // TODO to 15
+const ttlUnused = 15 * time.Second
 
 type bucket struct {
 	key         string
@@ -23,14 +26,15 @@ func newBucket(key string, maxLoad int64, delCh chan<- string) *bucket {
 		for {
 			<-ticker.C
 
-			if 0 < b.load {
-				b.load--
+			if 0 < atomic.LoadInt64(&b.load) {
+				atomic.AddInt64(&b.load, -1)
 			} else {
 				if b.unusedSince.IsZero() {
 					b.unusedSince = time.Now()
 				} else {
 					if ttlUnused < time.Now().Sub(b.unusedSince) {
 						delCh <- b.key
+						break
 					}
 				}
 			}
@@ -38,4 +42,13 @@ func newBucket(key string, maxLoad int64, delCh chan<- string) *bucket {
 	}()
 
 	return b
+}
+
+func (b *bucket) try() error {
+	if atomic.LoadInt64(&b.load) < b.maxload {
+		atomic.AddInt64(&b.load, 1)
+		return nil
+	}
+
+	return ErrBlocked
 }
