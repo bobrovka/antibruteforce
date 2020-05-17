@@ -64,7 +64,7 @@ func TestBucket(t *testing.T) {
 		}
 
 		// wait till some requests flow away
-		time.Sleep(5 * time.Second)
+		time.Sleep(5*time.Second + time.Second/100)
 
 		// check bucket filling
 		for i := int64(0); i < 100; i++ {
@@ -76,7 +76,7 @@ func TestBucket(t *testing.T) {
 			}
 		}
 	})
-	t.Run("check_bandwidth_login", func(t *testing.T) {
+	t.Run("check_bandwidth_password", func(t *testing.T) {
 		t.Parallel()
 		// 60 rpm = 1 rps
 		lb := NewLeakyBucket(1000, 60, 1000)
@@ -88,7 +88,7 @@ func TestBucket(t *testing.T) {
 		}
 
 		// wait till some requests flow away
-		time.Sleep(5 * time.Second)
+		time.Sleep(5*time.Second + time.Second/100)
 
 		// check bucket filling
 		for i := int64(0); i < 100; i++ {
@@ -100,7 +100,7 @@ func TestBucket(t *testing.T) {
 			}
 		}
 	})
-	t.Run("check_bandwidth_login", func(t *testing.T) {
+	t.Run("check_bandwidth_ip", func(t *testing.T) {
 		t.Parallel()
 		// 60 rpm = 1 rps
 		lb := NewLeakyBucket(1000, 1000, 60)
@@ -112,7 +112,7 @@ func TestBucket(t *testing.T) {
 		}
 
 		// wait till some requests flow away
-		time.Sleep(5 * time.Second)
+		time.Sleep(5*time.Second + time.Second/100)
 
 		// check bucket filling
 		for i := int64(0); i < 100; i++ {
