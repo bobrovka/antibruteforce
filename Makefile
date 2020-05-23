@@ -25,3 +25,7 @@ test.integration:
 	docker run --name redis-abf -p 6379:6379 -d --rm redis
 	CONFIG_PATH=${CUR_DIR}/config/config.json go test -race -v -count=1 ./... --tags integration
 	docker stop redis-abf
+
+.PHONY: golangci
+golangci:
+	docker run --rm -v $(CUR_DIR):/app -w /app golangci/golangci-lint:v1.27.0 golangci-lint run -v --timeout 2m

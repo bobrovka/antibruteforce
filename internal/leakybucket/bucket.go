@@ -37,11 +37,9 @@ func newBucket(key string, maxLoad int64, delCh chan<- string) *bucket {
 
 			if b.unusedSince.IsZero() {
 				b.unusedSince = time.Now()
-			} else {
-				if ttlUnused < time.Now().Sub(b.unusedSince) {
-					delCh <- b.key
-					break
-				}
+			} else if ttlUnused < time.Since(b.unusedSince) {
+				delCh <- b.key
+				break
 			}
 		}
 	}()
